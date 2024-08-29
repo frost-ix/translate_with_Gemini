@@ -1,0 +1,88 @@
+#inputTitle {
+  margin-bottom: 1%;
+}
+
+#inputTitle > #inputText {
+  width: 295px;
+}
+
+#inputSection {
+  width: 1200px;
+  display: flex;
+}
+
+#textArea {
+  width: 600px;
+  text-align: center;
+}
+
+#setAge {
+  margin-left: 1.5%;
+}
+
+#actionsLayer {
+  flex-direction: row;
+}
+
+#inputText {
+  width: 350px;
+  height: 40px;
+}
+
+#inputMin {
+  margin-bottom: 3%;
+}
+
+#inputLabel {
+  width: 200px;
+  height: 40px;
+}
+
+#selectorBox {
+  width: 600px;
+  margin-top: 2.1%;
+  text-align: center;
+}
+
+#selectFilter {
+  width: 350px;
+  height: 40px;
+  margin-bottom: 6.3%;
+}
+
+#selectModel {
+  width: 350px;
+  height: 40px;
+}
+
+#introduceBar {
+  width: 1200px;
+  flex-direction: row;
+}
+
+#showData {
+  width: 1400px;
+}
+
+#target {
+  margin-right: 45%;
+}
+
+#result {
+  margin-right: 30%;
+}
+
+#targetData {
+  width: 600px;
+  height: 500px;
+}
+
+#resultData {
+  width: 600px;
+  height: 500px;
+}
+
+#copyButton,
+#saveButton {
+  visibility: hidden;
+}
