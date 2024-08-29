@@ -1,5 +1,5 @@
 appId: io.frostix.translator.app
-productName: tr_v
+productName: t_w_g
 directories:
   buildResources: build
 files:
@@ -12,10 +12,9 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: tr_v
+  executableName: t_w_g
 nsis:
-  # artifactName: ${name}-${version}-setup.${ext}
-  artifactName: ${"번역기"}-${version}-setup.${ext}
+  artifactName: ${productName}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -40,7 +39,8 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  releaseType: release
+  url: https://github.com/frost-ix/translate_with_Gemini
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

@@ -1,7 +1,18 @@
 import { app, shell, BrowserWindow } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/gemini.png?asset'
+
+autoUpdater.checkForUpdatesAndNotify()
+
+autoUpdater.on('update-available', () => {
+  console.log('Update available')
+})
+
+autoUpdater.on('update-downloaded', () => {
+  autoUpdater.quitAndInstall()
+})
 
 function createWindow(): void {
   // Create the browser window.
