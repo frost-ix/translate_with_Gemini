@@ -1,8 +1,9 @@
 <script lang="ts">
 import gemini from '@renderer/functions/Gemini'
+import exception from '@renderer/error/ExceptionHandler'
 import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
-import { data, readOnlyData, variableActions } from '@renderer/types/interfaces'
+import { data, rDatas, readOnlyData, variableActions } from '@renderer/types/interfaces'
 
 export default {
   data(): {
@@ -31,7 +32,8 @@ export default {
       } as readOnlyData,
       variableActions: {
         actionButton: false,
-        isChecked: false
+        isCheckedOnce: true,
+        isCheckedBeta: false
       } as variableActions
     }
   },
@@ -62,19 +64,37 @@ export default {
 
         if (this.data.iData.targetURL) {
           const url: string = this.data.iData.targetURL
-          if (this.variableActions.isChecked) {
+          if (this.variableActions.isCheckedOnce) {
             const crawlingData: readOnlyData = await GApi.Crawling(serverUrl, url)
             this.readOnlyData.targetTitle = crawlingData.targetTitle
             this.readOnlyData.targetContent = crawlingData.targetContent
           } else {
-            const crawlingData: string[] = await GApi.CrawlingEpisodes(serverUrl, {
+            if (this.data.iData.startIndex < 1 || this.data.iData.endIndex < 1) {
+              this.exceptionHandler('uF')
+              return
+            }
+            if (this.data.iData.startIndex > this.data.iData.endIndex) {
+              this.exceptionHandler('mM')
+              return
+            }
+            const targetUrls: string[] = await GApi.CrawlingEpisodes(serverUrl, {
               url,
               targetIndex: {
                 startIndex: this.data.iData.startIndex - 1,
-                endIndex: this.data.iData.endIndex - 1
+                endIndex: this.data.iData.endIndex
               }
             })
-            console.log(crawlingData)
+            console.log(targetUrls)
+            const res: rDatas = new Array(targetUrls.length)
+            for (let i = 0; i < targetUrls.length; i++) {
+              const crawlingData: readOnlyData = await GApi.Crawling(serverUrl, targetUrls[i])
+              res[i] = {
+                targetTitle: crawlingData.targetTitle,
+                targetContent: crawlingData.targetContent,
+                resultData: crawlingData.resultData
+              }
+            }
+            console.log(res[0])
             alert('현재 구현 중 입니다.')
             return
           }
@@ -103,20 +123,23 @@ export default {
     },
     exceptionHandler(val: string) {
       if (val === 'p') {
-        gemini.PromptError()
+        exception.PromptError()
       }
       if (val === 'fM') {
-        gemini.FilterModelError()
+        exception.FilterModelError()
+      }
+      if (val === 'uF') {
+        exception.UnderFlowError()
+      }
+      if (val === 'mM') {
+        exception.MissMatchError()
       }
     },
     clear() {
-      const rData: { data; readOnlyData; variableActions } = gemini.ClearData(
-        this.data,
-        this.readOnlyData,
-        this.variableActions
-      )
-      this.data = rData.data
-      this.readOnlyData = rData.readOnlyData
+      const rData = gemini.ClearData(this.data, this.readOnlyData, this.variableActions)
+      this.data = rData.data as data
+      this.readOnlyData = rData.readOnlyData[0] as readOnlyData
+      this.variableActions = rData.variableActions as variableActions
       gemini.VisibleButtons(this.readOnlyData.resultData)
       console.clear()
     },
@@ -145,7 +168,7 @@ export default {
         <label for="inputTitle">52shuku 사이트 입력</label> <br />
         <input
           id="oneEpisode"
-          v-model="variableActions.isChecked"
+          v-model="variableActions.isCheckedOnce"
           type="checkbox"
           name="caseOne"
           value="episode"
@@ -168,7 +191,7 @@ export default {
         />
       </div>
     </div>
-    <div id="textArea countLabels" :style="{ opacity: variableActions.isChecked ? 0 : 1 }">
+    <div id="textArea countLabels" :style="{ opacity: variableActions.isCheckedOnce ? 0 : 1 }">
       <div id="inputMin">
         <label for="minLabel">시작 회차</label> <br />
         <input
@@ -201,10 +224,28 @@ export default {
         <option value="1">v1Alpha</option>
         <option value="2">v1Beta</option>
       </select>
-      <select id="selectModel" v-model="data.sData.selectModel">
+      <br />
+      <input
+        id="modelBeta"
+        v-model="variableActions.isCheckedBeta"
+        type="checkbox"
+        name="modelBeta"
+      />
+      베타
+      <select
+        v-if="variableActions.isCheckedBeta === false"
+        id="selectModel"
+        v-model="data.sData.selectModel"
+      >
         <option disabled value="">모델을 선택 해주세요 !</option>
-        <option value="1">Gemini 1.5 Flash</option>
-        <option value="0">Gemini 1.5 Pro</option>
+        <option value="0">Gemini 1.5 Flash</option>
+        <option value="1">Gemini 1.5 Pro</option>
+      </select>
+      <select v-else id="selectModel" v-model="data.sData.selectModel">
+        <option disabled value="">모델을 선택 해주세요 !</option>
+        <option value="10">Gemini-1.5-flash-8b-exp-0827</option>
+        <option value="11">Gemini-1.5-pro-exp-0801</option>
+        <option value="12">Gemini-1.5-pro-exp-0827</option>
       </select>
     </div>
   </div>
@@ -217,7 +258,7 @@ export default {
     <div class="action"><a class="action" @click="clear">초기화</a></div>
   </div>
   <div class="text" style="padding-bottom: -5%">
-    제목 : {{ variableActions.isChecked === true ? '1회차 모드' : '다회차 모드' }}
+    {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
   </div>
   <div id="introduceBar" class="text">
     <span id="target">원문</span>

@@ -19,12 +19,13 @@ export interface data {
 export interface readOnlyData {
   targetTitle: string
   targetContent: string
-  resultData?: string
+  resultData: string
 }
 
 export interface rDatas extends Array<readOnlyData> {}
 
 export interface variableActions {
   actionButton: boolean
-  isChecked: boolean
+  isCheckedOnce: boolean
+  isCheckedBeta: boolean
 }

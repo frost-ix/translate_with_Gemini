@@ -21,17 +21,10 @@ function ClearData(data: object, readOnlyData: object, variableActions: object) 
   ]
   variableActions = {
     actionButton: false,
-    isChecked: false
+    isCheckedOnce: true,
+    isCheckedBeta: false
   }
   return { data, readOnlyData, variableActions }
-}
-
-function PromptError() {
-  alert('프롬프트를 입력해주세요 !')
-}
-
-function FilterModelError() {
-  alert('필터와 모델을 선택해주세요 !')
 }
 
 function CheckLoad(n: number, m: number): boolean {
@@ -56,4 +49,8 @@ function VisibleButtons(resultData) {
   }
 }
 
-export default { ClearData, PromptError, FilterModelError, CheckLoad, VisibleButtons }
+export default {
+  ClearData,
+  CheckLoad,
+  VisibleButtons
+}
