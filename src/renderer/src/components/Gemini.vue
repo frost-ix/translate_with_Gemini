@@ -2,10 +2,14 @@
 import gemini from '@renderer/functions/Gemini'
 import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
-import { data, readOnlyData, variableActions } from '@renderer/types/types'
+import { data, readOnlyData, variableActions } from '@renderer/types/interfaces'
 
 export default {
-  data(): { data: data; readOnlyData: readOnlyData; variableActions: variableActions } {
+  data(): {
+    data: data
+    readOnlyData: readOnlyData
+    variableActions: variableActions
+  } {
     return {
       data: {
         iData: {
@@ -36,8 +40,16 @@ export default {
       try {
         const serverUrl: string = EnvControl()
 
-        const maxLoad = gemini.CheckLoad(this.data.iData.startIndex, this.data.iData.endIndex)
+        const maxLoad: boolean = gemini.CheckLoad(
+          this.data.iData.startIndex,
+          this.data.iData.endIndex
+        )
         if (maxLoad) {
+          return
+        }
+
+        if (!this.data.iData.inputPrompt) {
+          this.exceptionHandler('p')
           return
         }
 
@@ -55,16 +67,16 @@ export default {
             this.readOnlyData.targetTitle = crawlingData.targetTitle
             this.readOnlyData.targetContent = crawlingData.targetContent
           } else {
+            const crawlingData: string[] = await GApi.CrawlingEpisodes(serverUrl, {
+              url,
+              targetIndex: {
+                startIndex: this.data.iData.startIndex - 1,
+                endIndex: this.data.iData.endIndex - 1
+              }
+            })
+            console.log(crawlingData)
             alert('현재 구현 중 입니다.')
             return
-            // const crawlingData: string[] = await GApi.CrawlingEpisodes(serverUrl, {
-            //   url,
-            //   targetIndex: {
-            //     startIndex: this.data.iData.startIndex - 1,
-            //     endIndex: this.data.iData.endIndex - 1
-            //   }
-            // })
-            // console.log(crawlingData)
           }
         } else {
           this.readOnlyData.targetContent = 'Gemini 질의응답 모드 입니다.'
@@ -205,7 +217,7 @@ export default {
     <div class="action"><a class="action" @click="clear">초기화</a></div>
   </div>
   <div class="text" style="padding-bottom: -5%">
-    제목 : {{ readOnlyData.targetTitle ? readOnlyData.targetTitle : '대기중...' }}
+    제목 : {{ variableActions.isChecked === true ? '1회차 모드' : '다회차 모드' }}
   </div>
   <div id="introduceBar" class="text">
     <span id="target">원문</span>

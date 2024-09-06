@@ -22,6 +22,8 @@ export interface readOnlyData {
   resultData?: string
 }
 
+export interface rDatas extends Array<readOnlyData> {}
+
 export interface variableActions {
   actionButton: boolean
   isChecked: boolean

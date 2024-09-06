@@ -12,11 +12,13 @@ function ClearData(data: object, readOnlyData: object, variableActions: object) 
       selectModel: ''
     }
   }
-  readOnlyData = {
-    targetTitle: '',
-    targetContent: '',
-    resultData: '대기중 ......'
-  }
+  readOnlyData = [
+    {
+      targetTitle: '',
+      targetContent: '',
+      resultData: '대기중 ......'
+    }
+  ]
   variableActions = {
     actionButton: false,
     isChecked: false
@@ -32,7 +34,7 @@ function FilterModelError() {
   alert('필터와 모델을 선택해주세요 !')
 }
 
-function CheckLoad(n: number, m: number) {
+function CheckLoad(n: number, m: number): boolean {
   const maxLoad = 20
   if (maxLoad < m - n) {
     alert('요청 범위를 초과 했습니다 !')
