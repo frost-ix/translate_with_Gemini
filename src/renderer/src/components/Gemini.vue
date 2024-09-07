@@ -77,7 +77,7 @@ export default {
               this.exceptionHandler('mM')
               return
             }
-            const targetUrls: string[] = await GApi.CrawlingEpisodes(serverUrl, {
+            const targetUrls: Array<string> = await GApi.CrawlingEpisodes(serverUrl, {
               url,
               targetIndex: {
                 startIndex: this.data.iData.startIndex - 1,
@@ -94,7 +94,9 @@ export default {
                 resultData: crawlingData.resultData
               }
             }
-            console.log(res[0])
+            for (let i = 0; i < res.length; i++) {
+              console.log(res[i])
+            }
             alert('현재 구현 중 입니다.')
             return
           }
