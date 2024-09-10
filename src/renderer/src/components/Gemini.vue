@@ -10,6 +10,7 @@ export default {
     data: data
     readOnlyData: readOnlyData
     variableActions: variableActions
+    readOnlyDatas: rDatas
   } {
     return {
       data: {
@@ -30,6 +31,7 @@ export default {
         targetContent: '',
         resultData: '대기중 ......'
       } as readOnlyData,
+      readOnlyDatas: [] as rDatas,
       variableActions: {
         actionButton: false,
         isCheckedOnce: true,
@@ -94,16 +96,19 @@ export default {
                 resultData: crawlingData.resultData
               }
             }
+            this.readOnlyDatas = res
             for (let i = 0; i < res.length; i++) {
               console.log(res[i])
             }
+            console.log(this.readOnlyDatas.length)
             alert('현재 구현 중 입니다.')
-            return
+            // return
           }
         } else {
           this.readOnlyData.targetContent = 'Gemini 질의응답 모드 입니다.'
         }
 
+        this.readOnlyData.targetContent = this.readOnlyDatas[0].targetContent
         if (this.readOnlyData.targetContent) {
           const res: string = await GApi.SendPrompt(serverUrl, {
             insertData: this.data.iData,
@@ -265,6 +270,9 @@ export default {
   <div id="introduceBar" class="text">
     <span id="target">원문</span>
     <span id="result">결과</span>
+    <select id="episodeSelct" v-model="readOnlyDatas" name="ep">
+      <option v-for="r in readOnlyDatas.length" :key="r">{{ r }}</option>
+    </select>
     <span class="action">
       <a id="copyButton" class="action" @click="copyResData">복사</a>
       <a id="saveButton" class="action" @click="saveResData">저장</a>
@@ -277,7 +285,6 @@ export default {
     <span>
       <textarea id="resultData" v-model="readOnlyData.resultData" readonly />
     </span>
-    <span class="action"><a id="episodeTrigger" class="action">test</a></span>
   </div>
 </template>
 
