@@ -143,9 +143,15 @@ export default {
       }
     },
     clear() {
-      const rData = gemini.ClearData(this.data, this.readOnlyData, this.variableActions)
+      const rData = gemini.ClearData(
+        this.data,
+        this.readOnlyData,
+        this.readOnlyDatas,
+        this.variableActions
+      )
       this.data = rData.data as data
-      this.readOnlyData = rData.readOnlyData[0] as readOnlyData
+      this.readOnlyData = rData.readOnlyData as readOnlyData
+      this.readOnlyDatas = rData.rDatas as rDatas
       this.variableActions = rData.variableActions as variableActions
       gemini.VisibleButtons(this.readOnlyData.resultData)
       console.clear()

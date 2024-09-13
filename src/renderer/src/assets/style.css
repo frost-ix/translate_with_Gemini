@@ -83,6 +83,12 @@
 }
 
 #copyButton,
-#saveButton {
+#saveButton,
+#episodeSelct {
   visibility: hidden;
+}
+
+#episodeSelct {
+  width: 55px;
+  height: 25px;
 }
