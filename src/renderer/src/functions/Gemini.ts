@@ -3,7 +3,7 @@ function ClearData(data: object, readOnlyData: object, rDatas: object, variableA
     iData: {
       targetURL: '',
       startIndex: 1,
-      endIndex: 1,
+      endIndex: 2,
       targetAge: 0,
       inputPrompt: ''
     },
@@ -14,7 +14,7 @@ function ClearData(data: object, readOnlyData: object, rDatas: object, variableA
   }
   readOnlyData = {
     targetTitle: '',
-    targetContent: '',
+    targetContent: '대기중 ......',
     resultData: '대기중 ......'
   }
   rDatas = []
@@ -34,19 +34,24 @@ function CheckLoad(n: number, m: number): boolean {
   } else return false
 }
 
-function VisibleButtons(resultData) {
+function VisibleButtons(checkSum: number) {
   const copyButton = document.getElementById('copyButton')
   const saveButton = document.getElementById('saveButton')
-  const episodeSelect = document.getElementById('episodeSelect')
-  if (copyButton && saveButton && episodeSelect) {
-    if (resultData === '대기중 ......') {
+  const targetSelect = document.getElementById('targetSelect')
+  const resSelect = document.getElementById('resSelect')
+  if (copyButton && saveButton && targetSelect && resSelect) {
+    if (checkSum === 0) {
       copyButton.style.visibility = 'hidden'
       saveButton.style.visibility = 'hidden'
-      episodeSelect.style.visibility = 'hidden'
+      targetSelect.style.visibility = 'hidden'
+      resSelect.style.visibility = 'hidden'
     } else {
       copyButton.style.visibility = 'visible'
       saveButton.style.visibility = 'visible'
-      episodeSelect.style.visibility = 'visible'
+      if (checkSum !== 1) {
+        targetSelect.style.visibility = 'visible'
+        resSelect.style.visibility = 'visible'
+      }
     }
   }
 }

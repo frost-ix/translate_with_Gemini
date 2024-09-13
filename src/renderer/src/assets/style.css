@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+* {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
 #inputTitle {
   margin-bottom: 1%;
 }
@@ -7,7 +13,7 @@
 }
 
 #inputSection {
-  width: 1200px;
+  width: 1400px;
   display: flex;
 }
 
@@ -60,35 +66,44 @@
   flex-direction: row;
 }
 
-#showData {
-  width: 1400px;
+#readOnly {
+  display: flex;
 }
 
-#target {
-  margin-right: 45%;
+#targetSection,
+#resultSection {
+  width: 650px;
 }
 
-#result {
-  margin-right: 30%;
+#readOnly > #targetSection > #showData {
+  margin-top: 2.3%;
 }
 
-#targetData {
-  width: 600px;
-  height: 500px;
-}
-
+#targetData,
 #resultData {
-  width: 600px;
+  width: 650px;
   height: 500px;
+}
+
+#targetSelect {
+  margin-left: 5%;
+  margin-right: 37.5%;
+}
+
+#resSelect {
+  margin-left: 5%;
+  margin-right: 22%;
+}
+
+#targetSelect,
+#resSelect {
+  width: 55px;
+  height: 25px;
 }
 
 #copyButton,
 #saveButton,
-#episodeSelct {
+#targetSelect,
+#resSelect {
   visibility: hidden;
-}
-
-#episodeSelct {
-  width: 55px;
-  height: 25px;
 }

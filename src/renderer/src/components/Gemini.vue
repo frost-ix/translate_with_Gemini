@@ -11,13 +11,15 @@ export default {
     readOnlyData: readOnlyData
     variableActions: variableActions
     readOnlyDatas: rDatas
+    targetE: number
+    resultE: number
   } {
     return {
       data: {
         iData: {
           targetURL: '',
           startIndex: 1,
-          endIndex: 1,
+          endIndex: 2,
           targetAge: 0,
           inputPrompt: ''
         },
@@ -28,7 +30,7 @@ export default {
       } as data,
       readOnlyData: {
         targetTitle: '',
-        targetContent: '',
+        targetContent: '대기중 ......',
         resultData: '대기중 ......'
       } as readOnlyData,
       readOnlyDatas: [] as rDatas,
@@ -36,7 +38,9 @@ export default {
         actionButton: false,
         isCheckedOnce: true,
         isCheckedBeta: false
-      } as variableActions
+      } as variableActions,
+      targetE: 0,
+      resultE: 0
     }
   },
   methods: {
@@ -71,7 +75,7 @@ export default {
             this.readOnlyData.targetTitle = crawlingData.targetTitle
             this.readOnlyData.targetContent = crawlingData.targetContent
           } else {
-            if (this.data.iData.startIndex < 1 || this.data.iData.endIndex < 1) {
+            if (this.data.iData.startIndex < 1 || this.data.iData.endIndex < 2) {
               this.exceptionHandler('uF')
               return
             }
@@ -86,7 +90,6 @@ export default {
                 endIndex: this.data.iData.endIndex
               }
             })
-            console.log(targetUrls)
             const res: rDatas = new Array(targetUrls.length)
             for (let i = 0; i < targetUrls.length; i++) {
               const crawlingData: readOnlyData = await GApi.Crawling(serverUrl, targetUrls[i])
@@ -96,29 +99,31 @@ export default {
                 resultData: crawlingData.resultData
               }
             }
+            console.log(res)
             this.readOnlyDatas = res
-            for (let i = 0; i < res.length; i++) {
-              console.log(res[i])
-            }
-            console.log(this.readOnlyDatas.length)
-            alert('현재 구현 중 입니다.')
-            // return
           }
         } else {
           this.readOnlyData.targetContent = 'Gemini 질의응답 모드 입니다.'
         }
-
-        this.readOnlyData.targetContent = this.readOnlyDatas[0].targetContent
-        if (this.readOnlyData.targetContent) {
+        if (this.readOnlyDatas !== undefined && this.readOnlyDatas.length > 0) {
+          for (const r in this.readOnlyDatas) {
+            const res: string = await GApi.SendPrompt(serverUrl, {
+              insertData: this.data.iData,
+              targetContent: this.readOnlyDatas[r].targetContent,
+              selectData: this.data.sData
+            })
+            this.readOnlyDatas[r].resultData = res
+          }
+          gemini.VisibleButtons(this.readOnlyDatas.length)
+        } else {
           const res: string = await GApi.SendPrompt(serverUrl, {
             insertData: this.data.iData,
             targetContent: this.readOnlyData.targetContent,
             selectData: this.data.sData
           })
-
           this.readOnlyData.resultData = res
 
-          gemini.VisibleButtons(res)
+          gemini.VisibleButtons(1)
         }
 
         this.variableActions.actionButton = false
@@ -153,7 +158,7 @@ export default {
       this.readOnlyData = rData.readOnlyData as readOnlyData
       this.readOnlyDatas = rData.rDatas as rDatas
       this.variableActions = rData.variableActions as variableActions
-      gemini.VisibleButtons(this.readOnlyData.resultData)
+      gemini.VisibleButtons(0)
       console.clear()
     },
     copyResData() {
@@ -273,24 +278,41 @@ export default {
   <div class="text" style="padding-bottom: -5%">
     {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
   </div>
-  <div id="introduceBar" class="text">
-    <span id="target">원문</span>
-    <span id="result">결과</span>
-    <select id="episodeSelct" v-model="readOnlyDatas" name="ep">
-      <option v-for="r in readOnlyDatas.length" :key="r">{{ r }}</option>
-    </select>
-    <span class="action">
-      <a id="copyButton" class="action" @click="copyResData">복사</a>
-      <a id="saveButton" class="action" @click="saveResData">저장</a>
-    </span>
-  </div>
-  <div id="showData" class="text">
-    <span>
-      <textarea id="targetData" v-model="readOnlyData.targetContent" readonly />
-    </span>
-    <span>
-      <textarea id="resultData" v-model="readOnlyData.resultData" readonly />
-    </span>
+  <div id="readOnly">
+    <div id="targetSection">
+      <span id="target">원문</span>
+      <select id="targetSelect" v-model="readOnlyDatas" name="ep">
+        <option v-for="r in readOnlyDatas.length" :key="r">{{ r }}</option>
+      </select>
+      <div id="showData">
+        <textarea
+          v-if="readOnlyDatas.length === 0"
+          id="targetData"
+          v-model="readOnlyData.targetContent"
+          readonly
+        />
+        <textarea v-else id="targetData" v-model="readOnlyDatas[targetE].targetContent" readonly />
+      </div>
+    </div>
+    <div id="resultSection">
+      <span id="result">결과</span>
+      <select id="resSelect" v-model="readOnlyDatas" name="ep">
+        <option v-for="r in readOnlyDatas.length" :key="r">{{ r }}</option>
+      </select>
+      <span class="action">
+        <a id="copyButton" class="action" @click="copyResData">복사</a>
+        <a id="saveButton" class="action" @click="saveResData">저장</a>
+      </span>
+      <div id="showData">
+        <textarea
+          v-if="readOnlyDatas.length === 0"
+          id="resultData"
+          v-model="readOnlyData.resultData"
+          readonly
+        />
+        <textarea v-else id="targetData" v-model="readOnlyDatas[resultE].resultData" readonly />
+      </div>
+    </div>
   </div>
 </template>
 

@@ -21,7 +21,6 @@ async function CrawlingEpisodes(serverUrl: string, data: object): Promise<Array<
  * @author frost-ix
  */
 async function Crawling(serverUrl: string, url: string): Promise<readOnlyData> {
-  console.log(url)
   const res = await axios.post(serverUrl + 'cr', { url })
   return res.data
 }
