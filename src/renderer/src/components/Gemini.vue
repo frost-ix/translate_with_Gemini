@@ -90,38 +90,32 @@ export default {
                 endIndex: this.data.iData.endIndex
               }
             })
-            const res: rDatas = new Array(targetUrls.length)
-            for (let i = 0; i < targetUrls.length; i++) {
-              const crawlingData: readOnlyData = await GApi.Crawling(serverUrl, targetUrls[i])
-              res[i] = {
-                targetTitle: crawlingData.targetTitle,
-                targetContent: crawlingData.targetContent,
-                resultData: crawlingData.resultData
-              }
-            }
-            console.log(res)
-            this.readOnlyDatas = res
+            await targetUrls.forEach((r) => {
+              GApi.Crawling(serverUrl, r).then((data) => {
+                this.readOnlyDatas.push(data)
+              })
+            })
           }
         } else {
           this.readOnlyData.targetContent = 'Gemini 질의응답 모드 입니다.'
         }
         if (this.readOnlyDatas !== undefined && this.readOnlyDatas.length > 0) {
-          for (const r in this.readOnlyDatas) {
-            const res: string = await GApi.SendPrompt(serverUrl, {
+          await this.readOnlyDatas.forEach((r) => {
+            GApi.SendPrompt(serverUrl, {
               insertData: this.data.iData,
-              targetContent: this.readOnlyDatas[r].targetContent,
+              targetContent: r.targetContent,
               selectData: this.data.sData
+            }).then((data) => {
+              r.resultData = data
             })
-            this.readOnlyDatas[r].resultData = res
-          }
-          gemini.VisibleButtons(this.readOnlyDatas.length)
+          })
+          gemini.VisibleButtons(2)
         } else {
-          const res: string = await GApi.SendPrompt(serverUrl, {
+          this.readOnlyData.resultData = await GApi.SendPrompt(serverUrl, {
             insertData: this.data.iData,
             targetContent: this.readOnlyData.targetContent,
             selectData: this.data.sData
           })
-          this.readOnlyData.resultData = res
 
           gemini.VisibleButtons(1)
         }
@@ -133,6 +127,15 @@ export default {
         return
       }
     },
+
+    /**
+     * @description Exception Handling
+     * - p : PromptError
+     * - fM : FilterModelError
+     * - uF : UnderFlowError
+     * - mM : MissMatchError
+     * @param {string} val - 예외 처리를 위한 값
+     */
     exceptionHandler(val: string) {
       if (val === 'p') {
         exception.PromptError()
@@ -147,6 +150,11 @@ export default {
         exception.MissMatchError()
       }
     },
+    /***
+     * @description Reset datas
+     * - target data : data & readOnlyData & readOnlyDatas & variableActions
+     * - deactivate action buttons
+     */
     clear() {
       const rData = gemini.ClearData(
         this.data,
@@ -161,11 +169,23 @@ export default {
       gemini.VisibleButtons(0)
       console.clear()
     },
+
+    /***
+     * @description Copy Result data to clipboard
+     * - if result data is null, copy blank
+     * - else copy result data to clipboard
+     */
     copyResData() {
       window.navigator.clipboard.writeText(
         this.readOnlyData.resultData ? this.readOnlyData.resultData : ''
       )
     },
+
+    /***
+     * @description Save result data to .txt file
+     * - if result data is null, no action
+     * - else save result data to .txt file
+     */
     saveResData() {
       const saveText = this.readOnlyData.resultData ? this.readOnlyData.resultData : ''
       const blob: Blob = new Blob([saveText], { type: 'text/plain' })
@@ -281,7 +301,7 @@ export default {
   <div id="readOnly">
     <div id="targetSection">
       <span id="target">원문</span>
-      <select id="targetSelect" v-model="readOnlyDatas" name="ep">
+      <select v-if="readOnlyDatas.length !== 0" id="targetSelect" v-model="readOnlyDatas" name="ep">
         <option v-for="r in readOnlyDatas.length" :key="r">{{ r }}</option>
       </select>
       <div id="showData">
@@ -296,7 +316,7 @@ export default {
     </div>
     <div id="resultSection">
       <span id="result">결과</span>
-      <select id="resSelect" v-model="readOnlyDatas" name="ep">
+      <select v-if="readOnlyDatas.length !== 0" id="resSelect" v-model="readOnlyDatas" name="ep">
         <option v-for="r in readOnlyDatas.length" :key="r">{{ r }}</option>
       </select>
       <span class="action">

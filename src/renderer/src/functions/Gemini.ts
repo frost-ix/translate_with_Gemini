@@ -1,3 +1,12 @@
+/***
+ * @description Clear Data
+ * @param {object} data - Data
+ * @param {object} readOnlyData - Read Only Data
+ * @param {object} rDatas - Read Only Data Array
+ * @param {object} variableActions - Variable Actions
+ * @returns {object} Cleared Data
+ * @author frost-ix
+ */
 function ClearData(data: object, readOnlyData: object, rDatas: object, variableActions: object) {
   data = {
     iData: {
@@ -26,6 +35,15 @@ function ClearData(data: object, readOnlyData: object, rDatas: object, variableA
   return { data, readOnlyData, rDatas, variableActions }
 }
 
+/***
+ * @description Check load episodes
+ * @param {number} n - Start Index
+ * @param {number} m - End Index
+ * @returns {boolean} Check Load
+ * @example CheckLoad(3, 1) -> false
+ * @example CheckLoad(1, 20) -> true
+ * @author frost-ix
+ */
 function CheckLoad(n: number, m: number): boolean {
   const maxLoad = 20
   if (maxLoad < m - n) {
@@ -34,6 +52,15 @@ function CheckLoad(n: number, m: number): boolean {
   } else return false
 }
 
+/***
+ * @description Visible Buttons
+ * @param {number} checkSum - Check Sum
+ * @returns {void} Visible Buttons
+ * @example VisibleButtons(0) -> Hide All Buttons
+ * @example VisibleButtons(1) -> Show Copy & Save Buttons
+ * @example VisibleButtons(2) -> Show All Buttons
+ * @author frost-ix
+ */
 function VisibleButtons(checkSum: number) {
   const copyButton = document.getElementById('copyButton')
   const saveButton = document.getElementById('saveButton')

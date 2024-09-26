@@ -32,7 +32,7 @@ async function Crawling(serverUrl: string, url: string): Promise<readOnlyData> {
  *@returns {string} Prompt Response
  * @author frost-ix
  */
-async function SendPrompt(serverUrl: string, data: object): Promise<string> {
+async function SendPrompt(serverUrl: string, data: object) {
   const res = await axios.post(serverUrl + 'gemini', data)
   return res.data
 }
