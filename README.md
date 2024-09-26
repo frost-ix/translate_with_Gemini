@@ -2,8 +2,8 @@
 
 ## 다운로드
 
-- [윈도우](https://github.com/frost-ix/translate_with_Gemini/releases/download/gemini/t_w_g.1.0.1.exe)
-- [맥북](https://github.com/frost-ix/translate_with_Gemini/releases/download/gemini/t_w_g-1.0.1-arm64.dmg)
+- [Window OS](https://github.com/frost-ix/translate_with_Gemini/releases/download/gemini/t_w_g.1.0.1.exe)
+- [Mac OS](https://github.com/frost-ix/translate_with_Gemini/releases/download/gemini/t_w_g-1.0.1-arm64.dmg)
 
 ## 사용 방법
 
@@ -12,7 +12,9 @@
 2. 프롬프트 명령어에 원하는 명령어 넣기
 3. 필터와 모델 선택하기 (사용 해보면서 적합한 필터, 모델을 찾아보세요.)
 4. 실행 버튼을 누르고 대기하기
-5. 결과물이 나왔을 때, 복사 / 저장 버튼이 활성화 되어 이 점 활용하기
+5. 결과물이 나왔을 때, 복사 / 저장 버튼이 활성화
+   1. 복사 : 클립보드에 결과 데이터가 저장 됩니다.
+   2. 저장 : 결과 데이터가 txt 파일의 형태로 저장을 진행합니다.
 
 ## Used - Frontend
 
