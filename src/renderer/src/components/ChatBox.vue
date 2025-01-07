@@ -3,12 +3,21 @@
  * - Get Data from Parent Component (Ok)
  * - Show Chat Log from ChatBox Map
  */
+const emit = defineEmits(['send-message'])
+const sendMessage = (index) => {
+  emit('send-message', index)
+}
 export default {
   props: {
     message: String
   },
-  data() {
+  data(): {
+    inputMessage: string
+    chatBox: Map<number, string>
+    index: number
+  } {
     return {
+      inputMessage: '',
       chatBox: new Map<number, string>(),
       index: 0
     }
@@ -23,6 +32,7 @@ export default {
         const message = this.message as string
         this.chatBox.set(this.index, message)
         this.index++
+        sendMessage(this.inputMessage)
       }
     }
   }
@@ -32,14 +42,12 @@ export default {
   <div id="chatBox">
     <div v-for="item in chatBox" :key="item[0]">{{ item[0] }}: {{ item[1] }}</div>
   </div>
+  <form @submit.prevent="chatLog(false)">
+    <input v-model="inputMessage" type="text" />
+    <button type="submit">Send</button>
+  </form>
 </template>
 
 <style scoped>
-#chatBox {
-  height: 200px;
-  width: 300px;
-  overflow-y: scroll;
-  background-color: white;
-  border: 1px solid white;
-}
+@import '../assets/css/chatBox.css';
 </style>

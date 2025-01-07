@@ -3,8 +3,11 @@ import gemini from '@renderer/functions/Gemini'
 import exception from '@renderer/error/ExceptionHandler'
 import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
-import { data, rDatas, readOnlyData, variableActions } from '@renderer/types/interfaces'
 import ChatBox from '@renderer/components/ChatBox.vue'
+import { ref } from 'vue'
+import { data, rDatas, readOnlyData, variableActions } from '@renderer/types/interfaces'
+
+const insertMessage = ref('')
 
 export default {
   components: {
@@ -23,7 +26,7 @@ export default {
         iData: {
           targetURL: '',
           startIndex: 1,
-          endIndex: 2,
+          endIndex: 3,
           targetAge: 0,
           inputPrompt: ''
         },
@@ -130,6 +133,13 @@ export default {
         this.readOnlyData.resultData = '에러가 발생했습니다.\n다시 시도 해주세요 !!\n' + error
         return
       }
+    },
+
+    /***
+     * @description Change ChatBox Message
+     */
+    change(i) {
+      insertMessage.value = i
     },
 
     /**
@@ -297,9 +307,10 @@ export default {
   </div>
   <div id="actionsLayer" class="actions">
     <div class="action">
-      <a class="action" @click="fetchData">{{
-        variableActions.actionButton === true ? '진행중' : '실행'
-      }}</a>
+      <a class="action" @click="fetchData">
+        <ChatBox @send-message="change" />
+        {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a
+      >
     </div>
     <div class="action"><a class="action" @click="clear">초기화</a></div>
   </div>
@@ -348,5 +359,5 @@ export default {
 </template>
 
 <style>
-@import '../assets/style.css';
+@import '../assets/css/style.css';
 </style>
