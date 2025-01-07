@@ -1,6 +1,6 @@
 <script lang="ts">
 /*** TODO
- * - Get Data from Parent Component
+ * - Get Data from Parent Component (Ok)
  * - Show Chat Log from ChatBox Map
  */
 export default {
