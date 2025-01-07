@@ -293,8 +293,6 @@ export default {
         <option disabled value="">모델을 선택 해주세요 !</option>
         <option value="0">Gemini 1.5 Flash</option>
         <option value="1">Gemini 1.5 Pro</option>
-        <option value="2">Gemini 2.0 Flash</option>
-        <option value="3">Gemini LaernLM 1.5 Pro</option>
       </select>
       <select v-else id="selectModel" v-model="data.sData.selectModel">
         <option disabled value="">모델을 선택 해주세요 !</option>
