@@ -4,8 +4,12 @@ import exception from '@renderer/error/ExceptionHandler'
 import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
 import { data, rDatas, readOnlyData, variableActions } from '@renderer/types/interfaces'
+import ChatBox from '@renderer/components/ChatBox.vue'
 
 export default {
+  components: {
+    ChatBox
+  },
   data(): {
     data: data
     readOnlyData: readOnlyData
@@ -166,6 +170,7 @@ export default {
       this.readOnlyData = rData.readOnlyData as readOnlyData
       this.readOnlyDatas = rData.rDatas as rDatas
       this.variableActions = rData.variableActions as variableActions
+      ChatBox.chatLog(true)
       gemini.VisibleButtons(0)
       console.clear()
     },
@@ -298,7 +303,10 @@ export default {
   <div class="text" style="padding-bottom: -5%">
     {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
   </div>
-  <div id="readOnly">
+  <div>
+    <ChatBox :message="readOnlyData.resultData as string" />
+  </div>
+  <!-- <div id="readOnly">
     <div id="targetSection">
       <span id="target">원문</span>
       <select v-if="readOnlyDatas.length !== 0" id="targetSelect" v-model="readOnlyDatas" name="ep">
@@ -333,7 +341,7 @@ export default {
         <textarea v-else id="targetData" v-model="readOnlyDatas[resultE].resultData" readonly />
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style>
