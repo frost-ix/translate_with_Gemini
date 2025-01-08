@@ -1,12 +1,8 @@
 <script lang="ts">
 /*** TODO
  * - Get Data from Parent Component (Ok)
- * - Show Chat Log from ChatBox Map
+ * - Show Chat Log from ChatBox Map (Not working)
  */
-const emit = defineEmits(['send-message'])
-const sendMessage = (index) => {
-  emit('send-message', index)
-}
 export default {
   props: {
     message: String
@@ -32,7 +28,6 @@ export default {
         const message = this.message as string
         this.chatBox.set(this.index, message)
         this.index++
-        sendMessage(this.inputMessage)
       }
     }
   }
@@ -49,5 +44,5 @@ export default {
 </template>
 
 <style scoped>
-@import '../assets/css/chatBox.css';
+@import '../assets/css/chatbox.css';
 </style>

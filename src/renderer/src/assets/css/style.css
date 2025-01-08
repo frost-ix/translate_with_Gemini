@@ -107,3 +107,8 @@
 #resSelect {
   visibility: hidden;
 }
+
+
+#chatBox {
+  visibility: hidden;
+}

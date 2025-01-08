@@ -54,7 +54,6 @@ export default {
     async fetchData() {
       try {
         const serverUrl: string = EnvControl()
-
         const maxLoad: boolean = gemini.CheckLoad(
           this.data.iData.startIndex,
           this.data.iData.endIndex
@@ -218,7 +217,7 @@ export default {
   <div id="inputSection">
     <div id="textArea">
       <div id="inputTitle">
-        <label for="inputTitle">52shuku 사이트 입력</label> <br />
+        <label for="inputTitle">사이트 입력</label> <br />
         <input
           id="oneEpisode"
           v-model="variableActions.isCheckedOnce"
@@ -306,7 +305,7 @@ export default {
   <div id="actionsLayer" class="actions">
     <div class="action">
       <a class="action" @click="fetchData">
-        <ChatBox @send-message="change" />
+        <ChatBox id="chatBox" @send-message="change" />
         {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a
       >
     </div>
@@ -316,7 +315,7 @@ export default {
     {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
   </div>
   <div>
-    <ChatBox :message="readOnlyData.resultData as string" />
+    <ChatBox id="chatBox" :message="readOnlyData.resultData as string" />
   </div>
   <!-- <div id="readOnly">
     <div id="targetSection">
