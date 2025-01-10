@@ -61,7 +61,7 @@ function CheckLoad(n: number, m: number): boolean {
  * @example VisibleButtons(2) -> Show All Buttons
  * @author frost-ix
  */
-function VisibleButtons(checkSum: number) {
+function VisibleButtons(checkSum: number): void {
   const copyButton = document.getElementById('copyButton')
   const saveButton = document.getElementById('saveButton')
   const targetSelect = document.getElementById('targetSelect')

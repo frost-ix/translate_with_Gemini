@@ -54,6 +54,7 @@ export default {
     async fetchData() {
       try {
         const serverUrl: string = EnvControl()
+
         const maxLoad: boolean = gemini.CheckLoad(
           this.data.iData.startIndex,
           this.data.iData.endIndex
@@ -96,7 +97,7 @@ export default {
                 endIndex: this.data.iData.endIndex
               }
             })
-            await targetUrls.forEach((r) => {
+            targetUrls.forEach((r) => {
               GApi.Crawling(serverUrl, r).then((data) => {
                 this.readOnlyDatas.push(data)
               })
@@ -106,7 +107,7 @@ export default {
           this.readOnlyData.targetContent = 'Gemini 질의응답 모드 입니다.'
         }
         if (this.readOnlyDatas !== undefined && this.readOnlyDatas.length > 0) {
-          await this.readOnlyDatas.forEach((r) => {
+          this.readOnlyDatas.forEach((r) => {
             GApi.SendPrompt(serverUrl, {
               insertData: this.data.iData,
               targetContent: r.targetContent,
@@ -217,7 +218,7 @@ export default {
   <div id="inputSection">
     <div id="textArea">
       <div id="inputTitle">
-        <label for="inputTitle">사이트 입력</label> <br />
+        <label for="inputTitle">52shuku 사이트 입력</label> <br />
         <input
           id="oneEpisode"
           v-model="variableActions.isCheckedOnce"
@@ -305,7 +306,7 @@ export default {
   <div id="actionsLayer" class="actions">
     <div class="action">
       <a class="action" @click="fetchData">
-        <ChatBox id="chatBox" @send-message="change" />
+        <ChatBox @send-message="change" />
         {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a
       >
     </div>
@@ -314,8 +315,8 @@ export default {
   <div class="text" style="padding-bottom: -5%">
     {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
   </div>
-  <div>
-    <ChatBox id="chatBox" :message="readOnlyData.resultData as string" />
+  <div id="readOnly">
+    <ChatBox :message="readOnlyData.resultData as string" />
   </div>
   <!-- <div id="readOnly">
     <div id="targetSection">
