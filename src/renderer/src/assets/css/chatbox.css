@@ -1,3 +1,7 @@
+#chatBoxLayer {
+  background-color: white;
+}
+
 #chatBox {
   height: 200px;
   width: 300px;

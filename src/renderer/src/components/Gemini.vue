@@ -180,7 +180,6 @@ export default {
       this.readOnlyData = rData.readOnlyData as readOnlyData
       this.readOnlyDatas = rData.rDatas as rDatas
       this.variableActions = rData.variableActions as variableActions
-      ChatBox.chatLog(true)
       gemini.VisibleButtons(0)
       console.clear()
     },
@@ -304,9 +303,9 @@ export default {
     </div>
   </div>
   <div id="actionsLayer" class="actions">
+    <ChatBox @send-message="change" />
     <div class="action">
       <a class="action" @click="fetchData">
-        <ChatBox @send-message="change" />
         {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a
       >
     </div>
@@ -314,9 +313,6 @@ export default {
   </div>
   <div class="text" style="padding-bottom: -5%">
     {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
-  </div>
-  <div id="readOnly">
-    <ChatBox :message="readOnlyData.resultData as string" />
   </div>
   <!-- <div id="readOnly">
     <div id="targetSection">

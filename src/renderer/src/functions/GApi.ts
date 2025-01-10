@@ -9,7 +9,7 @@ import axios from 'axios'
  * @author frost-ix
  */
 async function CrawlingEpisodes(serverUrl: string, data: object): Promise<Array<string>> {
-  const res = await axios.get(serverUrl + 'ce', data)
+  const res = await axios.post(serverUrl + 'ce', data)
   return res.data.episodeURL
 }
 
@@ -21,7 +21,7 @@ async function CrawlingEpisodes(serverUrl: string, data: object): Promise<Array<
  * @author frost-ix
  */
 async function Crawling(serverUrl: string, url: string): Promise<readOnlyData> {
-  const res = await axios.get(serverUrl + 'cr', { url })
+  const res = await axios.post(serverUrl + 'cr', { url })
   return res.data
 }
 
@@ -33,7 +33,7 @@ async function Crawling(serverUrl: string, url: string): Promise<readOnlyData> {
  * @author frost-ix
  */
 async function SendPrompt(serverUrl: string, data: object): Promise<string> {
-  const res = await axios.get(serverUrl + 'gemini', data)
+  const res = await axios.post(serverUrl + 'gemini', data)
   return res.data
 }
 

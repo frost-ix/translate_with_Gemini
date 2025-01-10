@@ -3,10 +3,6 @@
  * - Get Data from Parent Component (Ok)
  * - Show Chat Log from ChatBox Map
  */
-const emit = defineEmits(['send-message'])
-const sendMessage = (index: string) => {
-  emit('send-message', index)
-}
 export default {
   props: {
     message: String
@@ -37,25 +33,20 @@ export default {
         const message = this.message as string
         this.chatBox.set(this.index, message)
         this.index++
-        sendMessage(this.inputMessage)
       }
     }
   }
 }
 </script>
 <template>
-  // 채팅박스
-  <div id="chatBox">
-    <div v-for="item in chatBox" :key="item[0]">{{ item[0] }}: {{ item[1] }}</div>
+  <!-- 채팅박스 -->
+  <div id="chatBoxLayer">
+    <div id="chatBox">
+      <div v-for="item in chatBox" :key="item[0]">{{ item[0] }}: {{ item[1] }}</div>
+    </div>
   </div>
-  // 구분선
+  <!-- 구분선 -->
   <div id="cutLine"></div>
-  // 채팅 입력창
-  <form @submit.prevent="chatLog(false)">
-    <input v-model="inputMessage" type="text" />
-    <button type="submit">Send</button>
-  </form>
-  <button @click="chatLog(true)">Clean</button>
 </template>
 
 <style scoped>
