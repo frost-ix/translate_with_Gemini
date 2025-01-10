@@ -6,6 +6,13 @@ interface insertData {
   inputPrompt: string
 }
 
+export interface iClearData {
+  data: data
+  readOnlyData: readOnlyData
+  rDatas: rDatas
+  variableActions: variableActions
+}
+
 interface selectData {
   selectFilter: string
   selectModel: string

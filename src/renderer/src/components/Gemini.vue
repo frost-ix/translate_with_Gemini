@@ -5,7 +5,7 @@ import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
 import ChatBox from '@renderer/components/ChatBox.vue'
 import { ref } from 'vue'
-import { data, rDatas, readOnlyData, variableActions } from '@renderer/types/interfaces'
+import { data, rDatas, readOnlyData, variableActions, iClearData } from '@renderer/types/interfaces'
 
 const insertMessage = ref('')
 
@@ -170,7 +170,7 @@ export default {
      * - deactivate action buttons
      */
     clear() {
-      const rData = gemini.ClearData(
+      const rData: iClearData = gemini.ClearData(
         this.data,
         this.readOnlyData,
         this.readOnlyDatas,

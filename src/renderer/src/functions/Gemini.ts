@@ -1,3 +1,5 @@
+import { iClearData } from '../types/interfaces'
+
 /***
  * @description Clear Data
  * @param {object} data - Data
@@ -7,7 +9,12 @@
  * @returns {object} Cleared Data
  * @author frost-ix
  */
-function ClearData(data: object, readOnlyData: object, rDatas: object, variableActions: object) {
+function ClearData(
+  data: object,
+  readOnlyData: object,
+  rDatas: object,
+  variableActions: object
+): iClearData {
   data = {
     iData: {
       targetURL: '',
@@ -32,7 +39,8 @@ function ClearData(data: object, readOnlyData: object, rDatas: object, variableA
     isCheckedOnce: true,
     isCheckedBeta: false
   }
-  return { data, readOnlyData, rDatas, variableActions }
+  const clearData: iClearData = { data, readOnlyData, rDatas, variableActions }
+  return clearData
 }
 
 /***

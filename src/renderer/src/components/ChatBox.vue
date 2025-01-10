@@ -44,9 +44,13 @@ export default {
 }
 </script>
 <template>
+  // 채팅박스
   <div id="chatBox">
     <div v-for="item in chatBox" :key="item[0]">{{ item[0] }}: {{ item[1] }}</div>
   </div>
+  // 구분선
+  <div id="cutLine"></div>
+  // 채팅 입력창
   <form @submit.prevent="chatLog(false)">
     <input v-model="inputMessage" type="text" />
     <button type="submit">Send</button>

@@ -5,3 +5,8 @@
   background-color: white;
   border: 1px solid white;
 }
+
+#cutLine {
+  border-top: 1px solid black;
+  margin: 30px 0px;
+}
