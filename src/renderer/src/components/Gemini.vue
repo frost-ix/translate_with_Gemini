@@ -3,7 +3,7 @@ import gemini from '@renderer/functions/Gemini'
 import exception from '@renderer/error/ExceptionHandler'
 import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
-import ChatBox from '@renderer/components/ChatBox.vue'
+import ChatBox from '@renderer/components/chat/ChatBox.vue'
 import { ref } from 'vue'
 import { data, rDatas, readOnlyData, variableActions, iClearData } from '@renderer/types/interfaces'
 
