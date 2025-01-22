@@ -23,7 +23,7 @@ export default {
     targetE: number
     resultE: number
     newMessage: string
-    messages: Array<{ id: number; text: string; isLeft: boolean }>
+    messages: Array<{ id: number; message: string; isLeft: boolean }>
   } {
     return {
       data: {
@@ -53,7 +53,7 @@ export default {
       targetE: 0,
       resultE: 0,
       newMessage: '',
-      messages: []
+      messages: [] as Array<{ id: number; message: string; isLeft: boolean }>
     }
   },
   methods: {
@@ -317,7 +317,7 @@ export default {
     <input
       v-model="newMessage"
       type="text"
-      @keyup.enter="messages.push({ id: 1, text: newMessage, isLeft: true })"
+      @keyup.enter="messages.push({ id: 1, message: newMessage, isLeft: true })"
     />
     <div class="action">
       <a class="action" @click="fetchData">
