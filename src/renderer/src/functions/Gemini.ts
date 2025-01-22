@@ -1,19 +1,19 @@
-import { iClearData } from '../types/interfaces'
+import { iClearData, data, readOnlyData, rDatas, variableActions } from '../types/interfaces'
 
 /***
  * @description Clear Data
- * @param {object} data - Data
- * @param {object} readOnlyData - Read Only Data
- * @param {object} rDatas - Read Only Data Array
- * @param {object} variableActions - Variable Actions
+ * @param {data} data - Data
+ * @param {readOnlyData} readOnlyDatas - Read Only Data
+ * @param {rDatas} rDatas - Read Only Data Array
+ * @param {variableActions} variableActions - Variable Actions
  * @returns {object} Cleared Data
  * @author frost-ix
  */
 function ClearData(
-  data: object,
-  readOnlyData: object,
-  rDatas: object,
-  variableActions: object
+  data: data,
+  readOnlyData: readOnlyData,
+  rDatas: rDatas,
+  variableActions: variableActions
 ): iClearData {
   data = {
     iData: {
@@ -27,19 +27,24 @@ function ClearData(
       selectFilter: '',
       selectModel: ''
     }
-  }
+  } as data
   readOnlyData = {
     targetTitle: '',
     targetContent: '대기중 ......',
     resultData: '대기중 ......'
-  }
-  rDatas = []
+  } as readOnlyData
+  rDatas = [] as rDatas
   variableActions = {
     actionButton: false,
     isCheckedOnce: true,
     isCheckedBeta: false
+  } as variableActions
+  const clearData: iClearData = {
+    data,
+    readOnlyData,
+    rDatas,
+    variableActions
   }
-  const clearData: iClearData = { data, readOnlyData, rDatas, variableActions }
   return clearData
 }
 
