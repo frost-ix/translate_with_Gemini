@@ -4,6 +4,7 @@ import exception from '@renderer/error/ExceptionHandler'
 import EnvControl from '@renderer/functions/EnvControl'
 import GApi from '@renderer/functions/GApi'
 import ChatBox from '@renderer/components/chat/ChatBox.vue'
+import BetaModels from '@renderer/components/options/BetaModels.vue'
 import { ref } from 'vue'
 import { data, rDatas, readOnlyData, variableActions, iClearData } from '@renderer/types/interfaces'
 
@@ -11,7 +12,8 @@ const insertMessage = ref('')
 
 export default {
   components: {
-    ChatBox
+    ChatBox,
+    BetaModels
   },
   data(): {
     data: data
@@ -20,6 +22,8 @@ export default {
     readOnlyDatas: rDatas
     targetE: number
     resultE: number
+    newMessage: string
+    messages: Array<{ id: number; text: string; isLeft: boolean }>
   } {
     return {
       data: {
@@ -47,7 +51,9 @@ export default {
         isCheckedBeta: false
       } as variableActions,
       targetE: 0,
-      resultE: 0
+      resultE: 0,
+      newMessage: '',
+      messages: []
     }
   },
   methods: {
@@ -208,6 +214,14 @@ export default {
       a.href = url
       a.download = '결과.txt'
       a.click()
+    },
+
+    /**
+     * @description Select Value from BetaModels
+     * @param value
+     */
+    handleSelectValue(value: string) {
+      this.data.sData.selectModel = value
     }
   }
 }
@@ -217,7 +231,7 @@ export default {
   <div id="inputSection">
     <div id="textArea">
       <div id="inputTitle">
-        <label for="inputTitle">52shuku 사이트 입력</label> <br />
+        <label for="inputTitle">사이트 입력</label> <br />
         <input
           id="oneEpisode"
           v-model="variableActions.isCheckedOnce"
@@ -293,17 +307,18 @@ export default {
         <option value="0">Gemini 1.5 Flash</option>
         <option value="1">Gemini 1.5 Pro</option>
       </select>
-      <select v-else id="selectModel" v-model="data.sData.selectModel">
-        <option disabled value="">모델을 선택 해주세요 !</option>
-        <option value="10">Gemini-1.5-flash-8b-exp-0827</option>
-        <option value="11">gemini-exp-1206</option>
-        <option value="20">gemini-2.0-flash-exp</option>
-        <option value="30">learnlm-1.5-pro-experimental</option>
+      <select v-else>
+        <BetaModels :data="data" @select-value="handleSelectValue" />
       </select>
     </div>
   </div>
   <div id="actionsLayer" class="actions">
-    <ChatBox @send-message="change" />
+    <ChatBox :messages="messages" />
+    <input
+      v-model="newMessage"
+      type="text"
+      @keyup.enter="messages.push({ id: 1, text: newMessage, isLeft: true })"
+    />
     <div class="action">
       <a class="action" @click="fetchData">
         {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a

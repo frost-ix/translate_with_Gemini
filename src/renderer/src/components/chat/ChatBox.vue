@@ -4,37 +4,16 @@
  * - Show Chat Log from ChatBox Map
  */
 import { defineComponent } from 'vue'
+import ChatMessage from './ChatMessage.vue'
 export default defineComponent({
+  name: 'ChatBox',
+  components: {
+    ChatMessage
+  },
   props: {
-    message: String
-  },
-  data(): {
-    inputMessage: string
-    chatBox: Map<number, string>
-    index: number
-  } {
-    return {
-      inputMessage: '',
-      chatBox: new Map<number, string>(),
-      index: 0
-    }
-  },
-  methods: {
-    chatLog(isClean: boolean) {
-      if (isClean) {
-        const res = confirm('채팅 기록을 전부 삭제 하시겠습니까? (Y/N)')
-        if (res) {
-          this.chatBox.clear()
-          this.index = 0
-          return
-        } else {
-          return
-        }
-      } else {
-        const message = this.message as string
-        this.chatBox.set(this.index, message)
-        this.index++
-      }
+    messages: {
+      type: Array as () => { id: number; message: string; isLeft: boolean }[],
+      required: true
     }
   }
 })
@@ -43,7 +22,12 @@ export default defineComponent({
   <!-- 채팅박스 -->
   <div id="chatBoxLayer">
     <div id="chatBox">
-      <div v-for="item in chatBox" :key="item[0]">{{ item[0] }}: {{ item[1] }}</div>
+      <ChatMessage
+        v-for="msg in messages"
+        :key="msg.id"
+        :message="msg.message"
+        :is-left="msg.isLeft"
+      />
     </div>
   </div>
   <!-- 구분선 -->
