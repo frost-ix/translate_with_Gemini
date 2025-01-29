@@ -12,17 +12,32 @@ export default defineComponent({
   emits: ['select-value'],
   data() {
     return {
-      selectedValue: ''
+      selectedValue: this.data.sData.selectModel,
+      models: [
+        { value: 10, text: 'Gemini-1.5-flash-8b-exp-0827' },
+        { value: 11, text: 'gemini-exp-1206' },
+        { value: 20, text: 'gemini-2.0-flash-exp' },
+        { value: 30, text: 'learnlm-1.5-pro-experimental' }
+      ]
+    }
+  },
+  watch: {
+    'data.sData.selectModel'(val: string) {
+      this.selectedValue = val
+    }
+  },
+  methods: {
+    emitSelectValue() {
+      this.$emit('select-value', this.selectedValue)
     }
   }
 })
 </script>
 <template>
-  <select id="selectModel" v-model="selectedValue" @change="$emit('select-value', selectedValue)">
+  <select id="selectModel" v-model="selectedValue" @change="emitSelectValue">
     <option disabled value="">모델을 선택 해주세요 !</option>
-    <option value="10">Gemini-1.5-flash-8b-exp-0827</option>
-    <option value="11">gemini-exp-1206</option>
-    <option value="20">gemini-2.0-flash-exp</option>
-    <option value="30">learnlm-1.5-pro-experimental</option>
+    <option v-for="model in models" :key="model.value" :model="model.text">
+      {{ model.text }}
+    </option>
   </select>
 </template>

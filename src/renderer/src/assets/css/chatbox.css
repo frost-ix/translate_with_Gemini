@@ -3,8 +3,6 @@
 }
 
 #chatBox {
-  height: 200px;
-  width: 300px;
   overflow-y: scroll;
   background-color: white;
   border: 1px solid white;
@@ -12,5 +10,5 @@
 
 #cutLine {
   border-top: 1px solid black;
-  margin: 30px 0px;
+  margin: 7.5px 0px;
 }

@@ -24,13 +24,11 @@ export default defineComponent({
 
 <style scoped>
 .message-left {
-  /* 왼쪽 정렬 스타일 */
   float: left;
   background-color: #ccc;
 }
 
 .message-right {
-  /* 오른쪽 정렬 스타일 */
   float: right;
   background-color: #f0f0f0;
 }

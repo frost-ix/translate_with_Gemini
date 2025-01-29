@@ -1,14 +1,11 @@
 <script lang="ts">
-import gemini from '@renderer/functions/Gemini'
 import exception from '@renderer/error/ExceptionHandler'
 import EnvControl from '@renderer/functions/EnvControl'
+import gemini from '@renderer/functions/Gemini'
 import GApi from '@renderer/functions/GApi'
 import ChatBox from '@renderer/components/chat/ChatBox.vue'
 import BetaModels from '@renderer/components/options/BetaModels.vue'
-import { ref } from 'vue'
 import { data, rDatas, readOnlyData, variableActions, iClearData } from '@renderer/types/interfaces'
-
-const insertMessage = ref('')
 
 export default {
   components: {
@@ -56,16 +53,17 @@ export default {
       messages: [] as Array<{ id: number; message: string; isLeft: boolean }>
     }
   },
+  computed: {
+    isBetaMode() {
+      return this.variableActions.isCheckedBeta
+    }
+  },
   methods: {
     async fetchData() {
       try {
         const serverUrl: string = EnvControl()
 
-        const maxLoad: boolean = gemini.CheckLoad(
-          this.data.iData.startIndex,
-          this.data.iData.endIndex
-        )
-        if (maxLoad) {
+        if (!gemini.CheckLoad(this.data.iData.startIndex, this.data.iData.endIndex)) {
           return
         }
 
@@ -139,13 +137,6 @@ export default {
         this.readOnlyData.resultData = '에러가 발생했습니다.\n다시 시도 해주세요 !!\n' + error
         return
       }
-    },
-
-    /***
-     * @description Change ChatBox Message
-     */
-    change(i) {
-      insertMessage.value = i
     },
 
     /**
@@ -222,6 +213,13 @@ export default {
      */
     handleSelectValue(value: string) {
       this.data.sData.selectModel = value
+    },
+    /**
+     * @description Add new message to ChatBox
+     */
+    addMessage() {
+      this.data.iData.inputPrompt = this.newMessage
+      this.messages.push({ id: 1, message: this.newMessage, isLeft: true })
     }
   }
 }
@@ -245,15 +243,6 @@ export default {
           v-model="data.iData.targetURL"
           type="text"
           placeholder="사이트를 입력 해주세요 !"
-        />
-      </div>
-      <div id="inputPrompt">
-        명령어 설정<br />
-        <textarea
-          id="inputText"
-          v-model="data.iData.inputPrompt"
-          type="text"
-          placeholder="프롬프트 설정을 해주세요 !"
         />
       </div>
     </div>
@@ -299,7 +288,7 @@ export default {
       />
       베타
       <select
-        v-if="variableActions.isCheckedBeta === false"
+        v-if="!variableActions.isCheckedBeta"
         id="selectModel"
         v-model="data.sData.selectModel"
       >
@@ -307,27 +296,36 @@ export default {
         <option value="0">Gemini 1.5 Flash</option>
         <option value="1">Gemini 1.5 Pro</option>
       </select>
-      <select v-else>
-        <BetaModels :data="data" @select-value="handleSelectValue" />
-      </select>
+      <BetaModels
+        v-else
+        v-model="data.sData.selectModel"
+        :data="data"
+        @select-value="handleSelectValue"
+      />
     </div>
-  </div>
-  <div id="actionsLayer" class="actions">
-    <ChatBox :messages="messages" />
-    <input
-      v-model="newMessage"
-      type="text"
-      @keyup.enter="messages.push({ id: 1, message: newMessage, isLeft: true })"
-    />
-    <div class="action">
-      <a class="action" @click="fetchData">
-        {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a
-      >
-    </div>
-    <div class="action"><a class="action" @click="clear">초기화</a></div>
   </div>
   <div class="text" style="padding-bottom: -5%">
     {{ variableActions.isCheckedOnce === true ? '1회차 모드' : '다회차 모드' }}
+  </div>
+  <div id="chatBox">
+    <ChatBox id="chatLog" :messages="messages" />
+    <div id="actionsLayer" class="actions">
+      <input
+        id="inputBox"
+        v-model="newMessage"
+        type="text"
+        placeholder="프롬프트를 입력해주세요."
+        @keyup.enter="addMessage"
+      />
+      <div id="actionButtons">
+        <div id="actionButton" class="action">
+          <a class="action" @click="fetchData">
+            {{ variableActions.actionButton === true ? '진행중' : '실행' }}</a
+          >
+        </div>
+        <div id="actionButton" class="action"><a class="action" @click="clear">초기화</a></div>
+      </div>
+    </div>
   </div>
   <!-- <div id="readOnly">
     <div id="targetSection">

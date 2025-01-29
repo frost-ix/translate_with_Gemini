@@ -61,8 +61,8 @@ function CheckLoad(n: number, m: number): boolean {
   const maxLoad = 20
   if (maxLoad < m - n) {
     alert('요청 범위를 초과 했습니다 !')
-    return true
-  } else return false
+    return false
+  } else return true
 }
 
 /***
